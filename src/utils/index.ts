@@ -1,3 +1,5 @@
 export { computerMove } from "./computerMove"
 export { isTerminal } from "./isTerminal"
 export { isBoardEmpty } from "./isBoardEmpty"
+export { changePlayer } from "./changePlayer"
+export { updateScores } from "./updateScores"

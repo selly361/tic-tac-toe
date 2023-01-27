@@ -43,6 +43,13 @@ interface IcomputerMove {
     board: Tboard;
 }
 
+
+interface IResults {
+  draw: boolean;
+  win: boolean;
+  loss: boolean;
+}
+
 export type {
   IGame,
   IGameSettings,
@@ -53,5 +60,6 @@ export type {
   Tdifficulty,
   Tplayer,
   IcomputerMove,
-  Tagainst
+  Tagainst,
+  IResults
 };

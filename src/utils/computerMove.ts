@@ -1,21 +1,16 @@
-import { Tboard, Tdifficulty, Tplayer } from "types/types";
+import { IGame, Tboard, Tdifficulty, Tplayer } from "types/types";
 
 import MiniMax from "tic-tac-toe-minimax";
 
-export const computerMove = (
-  huPlayer: Tplayer,
-  aiPlayer: Tplayer,
-  board: Tboard,
-  difficulty: Tdifficulty,
-) => {
-  const ComputerMove = MiniMax;
+export const computerMove = (state: IGame) => {
+  const { ComputerMove } = MiniMax;
 
   const symbols = {
-    aiPlayer,
-    huPlayer,
+    aiPlayer: state.settings.player == "X" ? "O" : "X",
+    huPlayer: state.settings.player,
   };
 
-  const nextMove: number = ComputerMove(board, symbols, difficulty);
+  const nextMove: number = ComputerMove(state.board, symbols, state.settings.difficulty);
 
   return nextMove;
 };

@@ -22,6 +22,6 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
-, "minimax.d.ts"  ]
+    "src",
+   "minimax.d.ts"  ]
 }

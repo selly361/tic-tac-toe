@@ -22,8 +22,8 @@ interface IGameSettings {
 
 interface Iscores {
   p1: number;
-  p2?: number;
-  cpu?: number;
+  p2: number;
+  cpu: number;
   ties: number;
 }
 

@@ -1,43 +1,38 @@
 import type { Tboard, Tplayer } from "../types/types";
 
+
+function checkWin(player: Tplayer, board: Tboard) {
+  if (
+    (board[0] == player && board[1] == player && board[2] == player) ||
+    (board[3] == player && board[4] == player && board[5] == player) ||
+    (board[6] == player && board[7] == player && board[8] == player) ||
+    (board[0] == player && board[3] == player && board[6] == player) ||
+    (board[1] == player && board[4] == player && board[7] == player) ||
+    (board[2] == player && board[5] == player && board[8] == player) ||
+    (board[0] == player && board[4] == player && board[8] == player) ||
+    (board[2] == player && board[4] == player && board[6] == player)
+  )
+    return true;
+}
+
+
+
 export function isTerminal(board: Tboard, player: Tplayer) {
   const results = { draw: false, win: false, loss: false };
 
-  function checkWin(p: Tplayer) {
-    if (
-      (board[0] == p && board[1] == p && board[2] == p) ||
-      (board[3] == p && board[4] == p && board[5] == p) ||
-      (board[6] == p && board[7] == p && board[8] == p) ||
-      (board[0] == p && board[3] == p && board[6] == p) ||
-      (board[1] == p && board[4] == p && board[7] == p) ||
-      (board[2] == p && board[5] == p && board[8] == p) ||
-      (board[0] == p && board[4] == p && board[8] == p) ||
-      (board[2] == p && board[4] == p && board[6] == p)
-    )
-      return true;
-  }
-
-  // Check for win
-  if (checkWin(player)) {
+  if (checkWin(player, board)) {
     results.win = true;
   }
 
-  // Check for draw
   if (results.win == false && results.loss == false) {
     if (board.filter((cell) => cell == null).length == 0) {
       results.draw = true;
     }
   }
 
-  // Check for loss
-  let opponent: Tplayer;
-  if (player == "X") {
-    opponent = "O";
-  } else {
-    opponent = "X";
-  }
+  const opponent = player == "O" ? "X" : "O"
 
-  if (checkWin(opponent)) {
+  if (checkWin(opponent, board)) {
     results.loss = true;
   }
 

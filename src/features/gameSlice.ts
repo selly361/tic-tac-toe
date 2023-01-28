@@ -6,15 +6,21 @@ import {
   Tplayer,
 } from "types/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-import { changePlayer, computerMove, isBoardEmpty, isTerminal, updateScores } from "utils";
+import {
+  changePlayer,
+  checkValidMove,
+  computerMove,
+  isBoardEmpty,
+  isTerminal,
+  updateScores,
+} from "utils";
 
 const initialState: IGame = {
   board: Array.from({ length: 9 }, (_, i) => i),
   winningCombo: [],
   currentPlayer: "X",
   settings: {
-    difficulty: "Normal",
+    difficulty: "Hard",
     against: "cpu",
     player: "X",
   },
@@ -23,9 +29,8 @@ const initialState: IGame = {
     p1: 0,
     p2: 0,
     cpu: 0,
-    ties: 0
+    ties: 0,
   },
-
 };
 
 const gameSlice = createSlice({
@@ -34,8 +39,6 @@ const gameSlice = createSlice({
   initialState,
 
   reducers: {
-
-
     setAgainstWho: (state, action: PayloadAction<Tagainst>) => {
       state.settings.against = action.payload;
     },
@@ -44,51 +47,54 @@ const gameSlice = createSlice({
       state.settings.difficulty = action.payload;
     },
 
-    processMove: (state, action: PayloadAction<number>) => {
-      const { player, against } = state.settings;
+    playerVPlayer: (state, action: PayloadAction<number>) => {
 
-      if (against == "player" && isBoardEmpty(state.board)) {
-
+      if (isBoardEmpty(state.board) && checkValidMove(action.payload, state.board)) {
+        
         state.board[action.payload] = state.currentPlayer;
 
-        const results = isTerminal(state.board, state.currentPlayer)
+        const results = isTerminal(state.board, state.currentPlayer);
 
-        state = updateScores(state, results)
+        state = updateScores(state, results);
 
-        state = changePlayer(state)
+        state = changePlayer(state);
+      }
+    },
+    
 
-      } else if (against == "cpu") {
+    playerVCpu: (state, action: PayloadAction<number>) => {
+      const { player } = state.settings;
 
-        if (player == state.currentPlayer && isBoardEmpty(state.board)) {
-          state.board[action.payload] = state.currentPlayer;
-          state = changePlayer(state)
+      if (
+        player == state.currentPlayer &&
+        isBoardEmpty(state.board) &&
+        checkValidMove(action.payload, state.board)
+      ) {
+        state.board[action.payload] = state.currentPlayer;
+        state = changePlayer(state);
 
-
-          if (isBoardEmpty(state.board)) {
-            const move = computerMove(state);
-            state.board[move] = state.currentPlayer;
-          }
-
-
-          const results = isTerminal(state.board, state.currentPlayer)
-          state = updateScores(state, results)
-
-          state = changePlayer(state)
-        }
-
-        else if (player !== state.currentPlayer) {
+        if (isBoardEmpty(state.board)) {
           const move = computerMove(state);
-
           state.board[move] = state.currentPlayer;
-          state = changePlayer(state)
         }
+
+        const results = isTerminal(state.board, state.currentPlayer);
+        state = updateScores(state, results);
+
+        state = changePlayer(state);
+      } else if (player !== state.currentPlayer) {
+        const move = computerMove(state);
+
+        state.board[move] = state.currentPlayer;
+        state = changePlayer(state);
       }
     },
 
 
+    
   },
 });
 
-
 export default gameSlice.reducer;
-export const { processMove, setAgainstWho, setDifficulty } = gameSlice.actions
+export const { playerVPlayer, setAgainstWho, setDifficulty, playerVCpu } =
+  gameSlice.actions;

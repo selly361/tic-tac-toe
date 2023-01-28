@@ -1,5 +1,6 @@
 import type { Tboard, Tplayer } from "../types/types";
 
+import { isBoardEmpty } from "./isBoardEmpty";
 
 function checkWin(player: Tplayer, board: Tboard) {
   if (
@@ -19,22 +20,17 @@ function checkWin(player: Tplayer, board: Tboard) {
 
 export function isTerminal(board: Tboard, player: Tplayer) {
   const results = { draw: false, win: false, loss: false };
+  const opponent = player == "O" ? "X" : "O"
 
   if (checkWin(player, board)) {
     results.win = true;
   }
 
-  if (results.win == false && results.loss == false) {
-    if (board.filter((cell) => cell == null).length == 0) {
-      results.draw = true;
-    }
-  }
-
-  const opponent = player == "O" ? "X" : "O"
-
-  if (checkWin(opponent, board)) {
+  else if (checkWin(opponent, board)) {
     results.loss = true;
   }
+
+  else if(!isBoardEmpty(board)) results.draw = true;
 
   return results;
 }

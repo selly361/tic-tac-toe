@@ -1,5 +1,6 @@
 import { IGame, IResults } from "types/types"
 
+import { isBoardEmpty } from "./isBoardEmpty"
 
 export function updateScores(state: IGame, results: IResults) {
 
@@ -9,7 +10,7 @@ export function updateScores(state: IGame, results: IResults) {
 
         else if (results.loss) state.scores.p2++
 
-        else if (results.draw) state.scores.ties++
+        else if(!isBoardEmpty(state.board)) state.scores.ties++
 
     }
 
@@ -20,14 +21,14 @@ export function updateScores(state: IGame, results: IResults) {
 
             else if (results.loss) state.scores.p1++
 
-            else if (results.draw) state.scores.ties++
+            else if(!isBoardEmpty(state.board)) state.scores.ties++
 
         } else {
             if (results.win) state.scores.cpu++
 
             else if (results.loss) state.scores.cpu++
 
-            else if (results.draw) state.scores.ties++
+            else if(!isBoardEmpty(state.board)) state.scores.ties++
         }
     }
 
